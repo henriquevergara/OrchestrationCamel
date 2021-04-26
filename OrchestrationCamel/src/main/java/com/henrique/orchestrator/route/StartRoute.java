@@ -1,9 +1,10 @@
 package com.henrique.orchestrator.route;
 
+import com.henrique.orchestrator.model.Usuario;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.dataformat.JsonLibrary;
-import org.apache.camel.model.rest.RestBindingMode;
+import org.apache.camel.model.rest.RestParamType;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,19 +13,18 @@ public class StartRoute extends RouteBuilder {
     @Override
     public void configure(){
 
-        restConfiguration()
-                .component("servlet")
-                .bindingMode(RestBindingMode.auto);
+        rest("/start").description("Start orchestration")
+                .consumes("application/json")
+                .produces("application/json")
 
-        rest("/start")
-
-                .get()
-                .route()
-                .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
-                .setHeader(Exchange.CONTENT_TYPE,constant("text"))
-                .endRest()
-
-                .post()
+                .post().description("Start o processo de cadastro de um novo cliente.").type(Usuario.class)
+                    .param().name("body").type(RestParamType.body).description("Cliente").endParam()
+                    .responseMessage()
+                    .code(200).message("Usuario enviado com sucesso!.")
+                    .endResponseMessage()
+                    .responseMessage()
+                    .code(503).message("Problema ao enviar a requisição.")
+                    .endResponseMessage()
                 .route()
                 .to("direct:http-onboard")
                 .endRest();
