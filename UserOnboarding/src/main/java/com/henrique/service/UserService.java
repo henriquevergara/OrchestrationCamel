@@ -15,7 +15,6 @@ public class UserService {
     @Autowired
     UsuarioRepository usuarioRepository;
 
-
     public ResponseEntity<?> createUser(Usuario usuario){
 
         if (Objects.isNull(usuario)){
