@@ -1,12 +1,32 @@
 package com.henrique.model;
 
+import javax.persistence.*;
+import java.util.UUID;
+
+@Entity
 public class Usuario {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", updatable = false, unique = true, nullable = false)
+    private UUID id;
+
+    @Column(name = "nm_nome")
     private String nome;
 
+    @Column(name = "desc_email")
     private String email;
 
+    @Column(name = "num_documento")
     private String documento;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public Usuario() {
     }
